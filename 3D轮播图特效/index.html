@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,height=device-height,initail-scale=1,minimum-scale=1,maximun-scale=1,user-scalable=no">
+	<title>3D轮播图特效</title>
+	<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+	<div class="swiper-wrapper">
+		<ul id="swiper" class="swiper"></ul>
+		<div id="dotlist" class="dots"></div>
+	</div>
+	<script>
+		var img_num = 6;//li下的div个数，即z平面上多边盒的边数
+		var cut_num = 6;//li个数，每个li代表切割的一块
+
+		var ang = 360/img_num;//每张图片旋转的角度
+		var ele_swiper = document.getElementById("swiper");
+		var ele_dotlist = document.getElementById("dotlist");
+		var ele_li;
+		var ele_div;
+		var ele_dot;
+		var swiperWidth = ele_swiper.clientWidth;//整个swiper区域的宽度
+		var width_li = swiperWidth/cut_num;//每个li的宽度
+		var tranZ_dist = 260;//每张轮播图rotate之后要向z轴平移的距离
+		var imgChosenId = 0;//初始显示第几张轮播图
+		
+		for (var i = 0; i < cut_num; i++) {//遍历li
+			ele_li = document.createElement("li");
+			
+			for (var j = 0; j < img_num; j++) {//遍历div
+				//动态创建图片div
+				ele_div = document.createElement("div");
+				ele_li.appendChild(ele_div);
+				ele_div.style.backgroundImage = "url(images/"+(j+1)+".jpg)";
+				ele_div.style.backgroundSize = swiperWidth+"px 300px";//图片宽度等于swiper区域宽度
+				ele_div.style.backgroundPosition = (swiperWidth/cut_num)*i*(-1) + "px 0";//图片定位
+				ele_div.style.transform = "rotateX("+ang*j+"deg) translateZ("+tranZ_dist+"px)";
+			}
+
+			ele_swiper.appendChild(ele_li);
+			ele_li.style.width = width_li+"px";
+			ele_li.style.left = width_li*i+"px";
+			(i > cut_num/2-1) && (ele_li.style.zIndex = (cut_num-i)*10);
+			ele_li.style.transform = "translateZ("+tranZ_dist*(-1)+"px) rotateX("+ang*imgChosenId+"deg)"; //设置初始li翻转角度
+		}
+
+		//动态创建轮播点按钮
+		for (var j = 0; j < img_num; j++) {
+			ele_dot = document.createElement("span");
+			ele_dot.setAttribute("idx",j);
+			ele_dotlist.appendChild(ele_dot);
+			if(j == imgChosenId){
+				ele_dot.className = "selected";
+			}
+		}
+
+		//点击切换轮播图
+		ele_dotlist.onclick = function doSwiper (e) {
+			var targetNode = e.target;
+			var idx;
+			var swipeNode;
+			if(targetNode.nodeName === "SPAN"){
+				for (var ii = 0; ii < this.childNodes.length; ii++) {
+					this.childNodes[ii].className = "";
+				};
+				targetNode.className = "selected";
+				idx = targetNode.getAttribute("idx");
+
+
+				for (var z = 0; z < cut_num; z++) {//遍历li
+					
+					/*for (var zi = 0; zi < img_num; zi++) {//遍历div
+						ele_swiper.childNodes[z].childNodes[zi]
+
+
+					}*/
+
+					swipeNode = ele_swiper.childNodes[z];
+					swipeNode.style.transform = "translateZ("+tranZ_dist*(-1)+"px) rotateX("+ang*idx+"deg)";
+					swipeNode.style.transitionDelay = 0.3*z+"s";
+				}
+
+			}
+		}
+
+	</script>
+</body>
+</html>
