@@ -14,7 +14,7 @@
 		<button id="okBtn">确定</button>
 	</div>
 	<div class="swiper-wrapper">
-		<ul id="swiper" class="swiper"></ul>
+		<div class="box"><ul id="swiper" class="swiper"></ul></div>
 		<div id="dotlist" class="dots"></div>
 	</div>
 	<script>
@@ -78,17 +78,17 @@
 					ele_div.style.backgroundSize = swiperWidth+"px 300px";//图片宽度等于swiper区域宽度
 					ele_div.style.backgroundPosition = (swiperWidth/cut_num)*i*(-1) + "px 0";//图片定位
 					ele_div.style.transform = "rotateX("+ang*j+"deg) translateZ("+tranZ_dist+"px)";
-					ele_div.style.WebkitTransform  = "rotateX("+ang*j+"deg) translateZ("+tranZ_dist+"px)";
-					ele_div.style.msTransform  = "rotateX("+ang*j+"deg) translateZ("+tranZ_dist+"px)";
+					ele_div.style.webkitTransform  = "-webkit-rotateX("+ang*j+"deg) -webkit-translateZ("+tranZ_dist+"px)";
 				}
 
 				ele_swiper.appendChild(ele_li);
 				ele_li.style.width = width_li+"px";
 				ele_li.style.left = width_li*i+"px";
-				(i > cut_num/2-1) && (ele_li.style.zIndex = (cut_num-i)*10);
+				(i >= cut_num/2-1) && (ele_li.style.zIndex = (cut_num-i)*10);
+
+
 				ele_li.style.transform = "translateZ("+tranZ_dist*(-1)+"px) rotateX("+ang*imgChosenId+"deg)";//设置初始li翻转角度 
-				ele_li.style.WebkitTransform  = "translateZ("+tranZ_dist*(-1)+"px) rotateX("+ang*imgChosenId+"deg)"; 
-				ele_li.style.msTransform  = "translateZ("+tranZ_dist*(-1)+"px) rotateX("+ang*imgChosenId+"deg)"; 
+				ele_li.style.webkitTransform  = "-webkit-ranslateZ("+tranZ_dist*(-1)+"px) -webkit-rotateX("+ang*imgChosenId+"deg)"; 
 			}
 
 			//动态创建轮播点按钮
@@ -121,11 +121,9 @@
 				for (var z = 0; z < cut_num; z++) {//遍历li
 					swipeNode = ele_swiper.childNodes[z];
 					swipeNode.style.transform = "translateZ("+tranZ_dist*(-1)+"px) rotateX("+ang*idx+"deg)";
-					swipeNode.style.WebkitTransform  = "translateZ("+tranZ_dist*(-1)+"px) rotateX("+ang*idx+"deg)";
-					swipeNode.style.msTransform  = "translateZ("+tranZ_dist*(-1)+"px) rotateX("+ang*idx+"deg)";
+					swipeNode.style.webkitTransform  = "-webkit-translateZ("+tranZ_dist*(-1)+"px) -webkit-rotateX("+ang*idx+"deg)";
 					swipeNode.style.transitionDelay = 0.3*z+"s";
-					swipeNode.style.WebkitTransitionDelay = 0.3*z+"s";
-					swipeNode.style.msTransitionDelay = 0.3*z+"s";
+					swipeNode.style.webkitTransitionDelay = 0.3*z+"s";
 				}
 			}
 		});

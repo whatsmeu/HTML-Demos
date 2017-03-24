@@ -11,53 +11,25 @@ li{
 	margin-top: 50px;
 	padding: 10px;
 	box-shadow: 0px 0px 10px 5px skyblue;
-	transform-style: preserve-3d;
-	-webkit-transform-style: preserve-3d;
-	-o-transform-style: preserve-3d;
-	-moz-transform-style: preserve-3d;
-	-ms-transform-style: preserve-3d;
-	perspective: 1000px;
-	-webkit-perspective: 1000px;
-	-o-perspective: 1000px;
-	-moz-perspective: 1000px;
-	-ms-perspective: 1000px;
-	perspective-origin: 50% 50%;
-	-webkit-perspective-origin: 50% 50%;
-	-o-perspective-origin: 50% 50%;
-	-moz-perspective-origin: 50% 50%;
-	-ms-perspective-origin: 50% 50%;
 }
 .swiper-wrapper ul{
 	position: relative;
 	width: 600px;
 	height: 300px;
 	box-shadow: 0px 0px 10px 2px pink;
-	overflow: hidden;
-	/*transform:translate/rotate(0px/deg); 若加这个属性，则3d效果消失。*/
+	perspective: 500px;
 }
 .swiper-wrapper ul li{
 	position: absolute;
 	height: 300px;
 	transform-style: preserve-3d;
-	-webkit-transform-style: preserve-3d;
-	-o-transform-style: preserve-3d;
-	-moz-transform-origin:0px 50% 0px;
-	-ms-transform-origin:0px 50% 0px;
+	-webkit-transform-style: -webkit-preserve-3d;
 	transform-origin:0px 50% 0px;
 	-webkit-transform-origin:0px 50% 0px;
-	-o-transform-origin:0px 50% 0px;
-	-moz-transform-origin:0px 50% 0px;
-	-ms-transform-origin:0px 50% 0px;
 	transform: rotateX(0deg);
-	-webkit-transform: rotateX(0deg);
-	-o-transform: rotateX(0deg);
-	-moz-transform: rotateX(0deg);
-	-ms-transform: rotateX(0deg);
+	-webkit-transform: -webkit-rotateX(0deg);
 	transition: transform 1s;
-	-webkit-transition: transform 1s;
-	-o-transition: transform 1s;
-	-moz-transition: transform 1s;
-	-ms-transition: transform 1s;
+	-webkit-transition: -webkit-transform 1s;
 }
 .swiper-wrapper ul li div{
 	position: absolute;
@@ -81,9 +53,6 @@ li{
 	border-radius: 10px;
 	transition: all .5s;
 	-webkit-transition: all .5s;
-	-o-transition: all .5s;
-	-moz-transition: all .5s;
-	-ms-transition: all .5s;
 }
 .dots span.selected{
 	background-color: red;
@@ -93,4 +62,8 @@ li{
 	height: 100px;
 	margin: 20px auto;
 	line-height: 45px;
+}
+.box{
+	height: 300px;
+	overflow: hidden;
 }
