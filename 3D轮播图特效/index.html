@@ -7,57 +7,107 @@
 	<link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+	<div class="controlBox">
+		<span>图片张数:<input id="imgNum" type="text" value="6" placeholder="图片张数1-8"></span>
+		<span>切片数:<input id="cutNum" type="text" value="6" placeholder="切片数"></span><br/>
+		<span>初始显示第几张图片<input id="chosenId" type="text" value="1" placeholder="初始显示第几张图片"></span>
+		<button id="okBtn">确定</button>
+	</div>
 	<div class="swiper-wrapper">
 		<ul id="swiper" class="swiper"></ul>
 		<div id="dotlist" class="dots"></div>
 	</div>
 	<script>
-		var img_num = 6;//li下的div个数，即z平面上多边盒的边数
-		var cut_num = 6;//li个数，每个li代表切割的一块
+		//var img_num = 6;//li下的div个数，即z平面上多边盒的边数
+		//var cut_num = 6;//li个数，每个li代表切割的一块
+		//var imgChosenId = 1;//初始显示第几张轮播图
+		var img_num;
+		var cut_num;
+		var imgChosenId;
 
-		var ang = 360/img_num;//每张图片旋转的角度
+		var ang;//每张图片旋转的角度
 		var ele_swiper = document.getElementById("swiper");
 		var ele_dotlist = document.getElementById("dotlist");
 		var ele_li;
 		var ele_div;
 		var ele_dot;
 		var swiperWidth = ele_swiper.clientWidth;//整个swiper区域的宽度
-		var width_li = swiperWidth/cut_num;//每个li的宽度
-		var tranZ_dist = 260;//每张轮播图rotate之后要向z轴平移的距离
-		var imgChosenId = 0;//初始显示第几张轮播图
+		var width_li;//每个li的宽度
+		var tranZ_dist;//每张轮播图rotate之后要向z轴平移的距离
 		
-		for (var i = 0; i < cut_num; i++) {//遍历li
-			ele_li = document.createElement("li");
-			
-			for (var j = 0; j < img_num; j++) {//遍历div
-				//动态创建图片div
-				ele_div = document.createElement("div");
-				ele_li.appendChild(ele_div);
-				ele_div.style.backgroundImage = "url(images/"+(j+1)+".jpg)";
-				ele_div.style.backgroundSize = swiperWidth+"px 300px";//图片宽度等于swiper区域宽度
-				ele_div.style.backgroundPosition = (swiperWidth/cut_num)*i*(-1) + "px 0";//图片定位
-				ele_div.style.transform = "rotateX("+ang*j+"deg) translateZ("+tranZ_dist+"px)";
-			}
+		function checkInput(){
+			img_num = document.getElementById("imgNum").value;
+			cut_num = document.getElementById("cutNum").value;
+			imgChosenId = document.getElementById("chosenId").value;
 
-			ele_swiper.appendChild(ele_li);
-			ele_li.style.width = width_li+"px";
-			ele_li.style.left = width_li*i+"px";
-			(i > cut_num/2-1) && (ele_li.style.zIndex = (cut_num-i)*10);
-			ele_li.style.transform = "translateZ("+tranZ_dist*(-1)+"px) rotateX("+ang*imgChosenId+"deg)"; //设置初始li翻转角度
+			img_num = parseInt(img_num) || 1;
+			cut_num = parseInt(cut_num) || 1;
+			imgChosenId = parseInt(imgChosenId) || 1;
+			imgChosenId -= 1;
+			(img_num>8) && (img_num=8) && (document.getElementById("imgNum").value=8);
 		}
 
-		//动态创建轮播点按钮
-		for (var j = 0; j < img_num; j++) {
-			ele_dot = document.createElement("span");
-			ele_dot.setAttribute("idx",j);
-			ele_dotlist.appendChild(ele_dot);
-			if(j == imgChosenId){
-				ele_dot.className = "selected";
+		function reset() {
+			while(ele_swiper.hasChildNodes()) //当div下还存在子节点时 循环继续
+		    {
+		        ele_swiper.removeChild(ele_swiper.firstChild);
+		    }
+		    while(ele_dotlist.hasChildNodes()) //当div下还存在子节点时 循环继续
+		    {
+		        ele_dotlist.removeChild(ele_dotlist.firstChild);
+		    }
+		}
+
+		function init(){
+			checkInput();
+			reset();
+
+			ang = 360/img_num;
+			tranZ_dist = 150/Math.tan(Math.PI/img_num);
+			console.log(Math.tan(Math.PI/img_num))
+			width_li = swiperWidth/cut_num;
+
+			for (var i = 0; i < cut_num; i++) {//遍历li
+				ele_li = document.createElement("li");
+				
+				for (var j = 0; j < img_num; j++) {//遍历div
+					//动态创建图片div
+					ele_div = document.createElement("div");
+					ele_li.appendChild(ele_div);
+					ele_div.style.backgroundImage = "url(images/"+(j+1)+".jpg)";
+					ele_div.style.backgroundSize = swiperWidth+"px 300px";//图片宽度等于swiper区域宽度
+					ele_div.style.backgroundPosition = (swiperWidth/cut_num)*i*(-1) + "px 0";//图片定位
+					ele_div.style.transform = "rotateX("+ang*j+"deg) translateZ("+tranZ_dist+"px)";
+					ele_div.style.WebkitTransform  = "rotateX("+ang*j+"deg) translateZ("+tranZ_dist+"px)";
+					ele_div.style.msTransform  = "rotateX("+ang*j+"deg) translateZ("+tranZ_dist+"px)";
+				}
+
+				ele_swiper.appendChild(ele_li);
+				ele_li.style.width = width_li+"px";
+				ele_li.style.left = width_li*i+"px";
+				(i > cut_num/2-1) && (ele_li.style.zIndex = (cut_num-i)*10);
+				ele_li.style.transform = "translateZ("+tranZ_dist*(-1)+"px) rotateX("+ang*imgChosenId+"deg)";//设置初始li翻转角度 
+				ele_li.style.WebkitTransform  = "translateZ("+tranZ_dist*(-1)+"px) rotateX("+ang*imgChosenId+"deg)"; 
+				ele_li.style.msTransform  = "translateZ("+tranZ_dist*(-1)+"px) rotateX("+ang*imgChosenId+"deg)"; 
+			}
+
+			//动态创建轮播点按钮
+			for (var j = 0; j < img_num; j++) {
+				ele_dot = document.createElement("span");
+				ele_dot.setAttribute("idx",j);
+				ele_dotlist.appendChild(ele_dot);
+				if(j == imgChosenId){
+					ele_dot.className = "selected";
+				}
 			}
 		}
+
+		okBtn.addEventListener("click",function (e) {
+			init();
+		});
 
 		//点击切换轮播图
-		ele_dotlist.onclick = function doSwiper (e) {
+		ele_dotlist.addEventListener("click",function (e) {
 			var targetNode = e.target;
 			var idx;
 			var swipeNode;
@@ -68,22 +118,20 @@
 				targetNode.className = "selected";
 				idx = targetNode.getAttribute("idx");
 
-
 				for (var z = 0; z < cut_num; z++) {//遍历li
-					
-					/*for (var zi = 0; zi < img_num; zi++) {//遍历div
-						ele_swiper.childNodes[z].childNodes[zi]
-
-
-					}*/
-
 					swipeNode = ele_swiper.childNodes[z];
 					swipeNode.style.transform = "translateZ("+tranZ_dist*(-1)+"px) rotateX("+ang*idx+"deg)";
+					swipeNode.style.WebkitTransform  = "translateZ("+tranZ_dist*(-1)+"px) rotateX("+ang*idx+"deg)";
+					swipeNode.style.msTransform  = "translateZ("+tranZ_dist*(-1)+"px) rotateX("+ang*idx+"deg)";
 					swipeNode.style.transitionDelay = 0.3*z+"s";
+					swipeNode.style.WebkitTransitionDelay = 0.3*z+"s";
+					swipeNode.style.msTransitionDelay = 0.3*z+"s";
 				}
-
 			}
-		}
+		});
+
+
+		init();
 
 	</script>
 </body>
